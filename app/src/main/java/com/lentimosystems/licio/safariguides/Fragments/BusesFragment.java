@@ -79,7 +79,7 @@ public class BusesFragment extends Fragment {
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
-                    public void onClick(View view, int position) {
+                    public void onclick(View view, int position, boolean isLongClick) {
 
                     }
                 });

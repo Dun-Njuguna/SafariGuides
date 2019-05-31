@@ -9,13 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
@@ -26,14 +31,18 @@ import com.squareup.picasso.Picasso;
 
 public class VansDetailActivity extends AppCompatActivity {
 
-    Query query;
-    FirebaseRecyclerOptions<VansItem> options;
-    FirebaseRecyclerAdapter<VansItem, VansDetailViewHolder> adapter;
+
     FirebaseDatabase database;
     DatabaseReference vansData;
+    String vanId ="";
+    VansItem currentVan;
+    ImageView vanImage;
+    TextView numberPlate;
+    ImageView driverImage;
+    TextView driverName;
 
-    RecyclerView recyclerView;
-   // RelativeLayout relativeLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,124 +56,44 @@ public class VansDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        recyclerView = (RecyclerView)findViewById(R.id.recycler_vans_detail);
-//        recyclerView.setHasFixedSize(true);
 
-        //relativeLayout = (RelativeLayout)findViewById(R.id.relative_vans_detail);
-        
-        loadVans();
-    }
+        vanImage = (ImageView) findViewById(R.id.vanImage);
+        numberPlate = (TextView) findViewById(R.id.numberPlate);
+        driverImage = (ImageView) findViewById(R.id.driverImage);
+        driverName = (TextView) findViewById(R.id.driverName);
 
-    private void loadVans() {
+
+
+
+        //firebase
         database = FirebaseDatabase.getInstance();
-        vansData = database.getReference(Common.STR_VANS_BACKGROUND);
+        vansData = database.getReference("vansData");
 
-        query = FirebaseDatabase.getInstance().getReference(Common.STR_VANS_BACKGROUND)
-                .orderByChild("1").equalTo("numberPlate");
-        options = new FirebaseRecyclerOptions.Builder<VansItem>()
-                .setQuery(query,VansItem.class)
-                .build();
-        adapter = new FirebaseRecyclerAdapter<VansItem, VansDetailViewHolder>(options) {
+        //get van clicked id from intent
+        if (getIntent() != null) {
+            vanId = getIntent().getStringExtra("vanId");
+        }
+        
+        loadVans(vanId);
+    }
+
+    private void loadVans(String vanId) {
+        vansData.child(vanId).addValueEventListener(new ValueEventListener() {
             @Override
-            protected void onBindViewHolder(@NonNull final VansDetailViewHolder holder, int position, @NonNull final VansItem model) {
-                Picasso.get()
-                        .load(model.getCarImage())
-                        .into(holder.vanImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get()
-                                        .load(model.getCarImage())
-                                        .error(R.drawable.ic_terrain_black_24dp)
-                                        .into(holder.vanImage, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-                                                Log.e("Error","Couldn't fetch image");
-                                            }
-                                        });
-                            }
-                        });
-
-                Picasso.get()
-                        .load(model.getDriverImage())
-                        .into(holder.driverImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get()
-                                        .load(model.getDriverImage())
-                                        .error(R.drawable.ic_terrain_black_24dp)
-                                        .into(holder.driverImage, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-                                                Log.e("Error","Couldn't fetch image");
-                                            }
-                                        });
-                            }
-                        });
-
-                holder.driverName.setText(model.getDriver());
-                holder.numberPlate.setText(model.getNumberPlate());
-
-                holder.setItemClickListener(new ItemClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-
-                    }
-                });
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentVan = dataSnapshot.getValue(VansItem.class);
+                Picasso.get().load(currentVan.getCarImage()).into(vanImage);
+                numberPlate.setText(currentVan.getNumberPlate());
+                Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
+                driverName.setText(currentVan.getDriver());
             }
 
-            @NonNull
             @Override
-            public VansDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-                View itemView = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.layout_driver_info,parent,false);
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                return new VansDetailViewHolder(itemView);
             }
-        };
-
-        adapter.startListening();
-//        recyclerView.setAdapter(adapter);
-       // relativeLayout.setVisibility(View.VISIBLE);
+        });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (adapter!=null)
-            adapter.startListening();
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (adapter!=null)
-            adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        if (adapter!=null)
-            adapter.stopListening();
-        super.onStop();
-    }
 }
