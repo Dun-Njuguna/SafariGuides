@@ -85,10 +85,11 @@ public class VansFragment extends Fragment {
 
                holder.setItemClickListener(new ItemClickListener() {
                    @Override
-                   public void onClick(View view, int position) {
-                       Common.VAN_ID_SELECTED = adapter.getRef(position).getKey();
-                       Common.VAN_SELECTED = model.getNumberPlate();
+                   public void onclick(View view, int position, boolean isLongClick) {
+//                       Common.VAN_ID_SELECTED = adapter.getRef(position).getKey();
+//                       Common.VAN_SELECTED = model.getNumberPlate();
                        Intent intent = new Intent(getActivity(), VansDetailActivity.class);
+                       intent.putExtra("vanId", adapter.getRef(position).getKey());
                        startActivity(intent);
                    }
                });

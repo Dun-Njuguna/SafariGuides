@@ -31,6 +31,6 @@ public class VansDetailViewHolder extends RecyclerView.ViewHolder implements Vie
 
     @Override
     public void onClick(View v) {
-        itemClickListener.onClick(v,getAdapterPosition());
+        itemClickListener.onclick(v, getAdapterPosition(),false);
     }
 }

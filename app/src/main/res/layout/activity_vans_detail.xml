@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
                 android:id="@+id/vanImage"
+                android:src="@drawable/splash"
                 android:scaleType="centerCrop" />
 
             <RelativeLayout
