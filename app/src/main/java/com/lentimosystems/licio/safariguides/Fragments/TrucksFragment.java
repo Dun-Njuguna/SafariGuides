@@ -1,6 +1,7 @@
 package com.lentimosystems.licio.safariguides.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
 import com.lentimosystems.licio.safariguides.R;
+import com.lentimosystems.licio.safariguides.TrucksDetailActivity;
 import com.lentimosystems.licio.safariguides.ViewHolder.CruisersViewHolder;
 import com.lentimosystems.licio.safariguides.ViewHolder.TrucksViewHolder;
 import com.squareup.picasso.Callback;
@@ -81,6 +83,9 @@ public class TrucksFragment extends Fragment {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onclick(View view, int position, boolean isLongClick) {
+                        Intent intent = new Intent(getActivity(), TrucksDetailActivity.class);
+                        intent.putExtra("truckId", adapter.getRef(position).getKey());
+                        startActivity(intent);
 
                     }
                 });

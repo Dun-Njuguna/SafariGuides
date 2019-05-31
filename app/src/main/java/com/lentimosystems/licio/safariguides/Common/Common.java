@@ -7,4 +7,7 @@ public class Common {
     public static final String STR_BUSES_BACKGROUND = "busesData";
     public static String VAN_SELECTED;
     public static String VAN_ID_SELECTED;
+    public static String CRUISER_SELECTED;
+    public static String TRUCK_SELECTED;
+    public static String BUS_SELECTED;
 }

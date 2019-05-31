@@ -1,6 +1,7 @@
 package com.lentimosystems.licio.safariguides.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,10 +16,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.lentimosystems.licio.safariguides.BusesDetailActivity;
 import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
 import com.lentimosystems.licio.safariguides.R;
+import com.lentimosystems.licio.safariguides.TrucksDetailActivity;
 import com.lentimosystems.licio.safariguides.ViewHolder.BusesViewHolder;
 import com.lentimosystems.licio.safariguides.ViewHolder.CruisersViewHolder;
 import com.squareup.picasso.Callback;
@@ -80,6 +83,9 @@ public class BusesFragment extends Fragment {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onclick(View view, int position, boolean isLongClick) {
+                        Intent intent = new Intent(getActivity(), BusesDetailActivity.class);
+                        intent.putExtra("busId", adapter.getRef(position).getKey());
+                        startActivity(intent);
 
                     }
                 });
