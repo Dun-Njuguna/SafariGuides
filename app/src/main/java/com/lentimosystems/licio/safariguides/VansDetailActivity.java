@@ -1,17 +1,24 @@
 package com.lentimosystems.licio.safariguides;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.media.RatingCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -37,9 +44,11 @@ public class VansDetailActivity extends AppCompatActivity {
     String vanId ="";
     VansItem currentVan;
     ImageView vanImage;
-    TextView numberPlate;
+    TextView numberPlate,ratingTextView;
     ImageView driverImage;
     TextView driverName;
+    Button btnRate;
+    AppCompatRatingBar ratingBar;
 
 
 
@@ -48,6 +57,24 @@ public class VansDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vans_detail);
+
+        btnRate = findViewById(R.id.btnRate);
+        ratingTextView = findViewById(R.id.ratingTextView);
+        ratingBar = findViewById(R.id.rate);
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratingTextView.setText("Rating: "+rating);
+            }
+        });
+        btnRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               // Toast.makeText(VansDetailActivity.this, "Rated"+ratingBar, Toast.LENGTH_SHORT).show();
+                //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            }
+        });
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(Common.VAN_SELECTED);
