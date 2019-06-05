@@ -1,5 +1,6 @@
 package com.lentimosystems.licio.safariguides;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -11,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -22,6 +25,9 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +36,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
+import com.lentimosystems.licio.safariguides.Models.Comment;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
 import com.lentimosystems.licio.safariguides.ViewHolder.VansDetailViewHolder;
 import com.squareup.picasso.Callback;
@@ -47,8 +54,10 @@ public class VansDetailActivity extends AppCompatActivity {
     TextView numberPlate,ratingTextView;
     ImageView driverImage;
     TextView driverName;
-    Button btnRate;
+    Button btnRate,btnAddReview;
     AppCompatRatingBar ratingBar;
+    EditText edtReview;
+    FirebaseUser firebaseUser;
 
 
 
@@ -61,6 +70,8 @@ public class VansDetailActivity extends AppCompatActivity {
         btnRate = findViewById(R.id.btnRate);
         ratingTextView = findViewById(R.id.ratingTextView);
         ratingBar = findViewById(R.id.rate);
+        edtReview = findViewById(R.id.edtReview);
+        btnAddReview = findViewById(R.id.btnAddReview);
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -100,8 +111,56 @@ public class VansDetailActivity extends AppCompatActivity {
         if (getIntent() != null) {
             vanId = getIntent().getStringExtra("vanId");
         }
-        
+
+//        btnAddReview.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                btnAddReview.setVisibility(View.INVISIBLE);
+//                DatabaseReference vansData = database.getReference("Comment").child(vanId).push();
+//                String comment_content = edtReview.getText().toString();
+//                String uid = firebaseUser.getUid();
+//                String uname = firebaseUser.getDisplayName();
+//                Comment comment = new Comment(comment_content,uid,uname);
+//            }
+//        });
+//
+//        vansData.setValue(currentVan).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//                showMessage("comment added");
+//                edtReview.setText("");
+//                btnAddReview.setVisibility(View.VISIBLE);
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                showMessage("failed to add comment : "+e.getMessage());
+//            }
+//        });
+
+
         loadVans(vanId);
+    }
+//    private void showMessage(String message) {
+//
+//        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+//
+//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // todo: goto back activity from here
+
+                Intent intent = new Intent(VansDetailActivity.this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void loadVans(String vanId) {
