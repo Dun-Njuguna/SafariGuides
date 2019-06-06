@@ -27,6 +27,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,47 +46,20 @@ import com.squareup.picasso.Picasso;
 
 public class VansDetailActivity extends AppCompatActivity {
 
-
     FirebaseDatabase database;
     DatabaseReference vansData;
-    String vanId ="";
+
     VansItem currentVan;
     ImageView vanImage;
     TextView numberPlate,ratingTextView;
     ImageView driverImage;
     TextView driverName;
-    Button btnRate,btnAddReview;
-    AppCompatRatingBar ratingBar;
-    EditText edtReview;
-    FirebaseUser firebaseUser;
-
-
-
+    Button btnRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vans_detail);
-
-        btnRate = findViewById(R.id.btnRate);
-        ratingTextView = findViewById(R.id.ratingTextView);
-        ratingBar = findViewById(R.id.rate);
-        edtReview = findViewById(R.id.edtReview);
-        btnAddReview = findViewById(R.id.btnAddReview);
-
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                ratingTextView.setText("Rating: "+rating);
-            }
-        });
-        btnRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // Toast.makeText(VansDetailActivity.this, "Rated"+ratingBar, Toast.LENGTH_SHORT).show();
-                //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            }
-        });
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(Common.VAN_SELECTED);
@@ -99,9 +73,18 @@ public class VansDetailActivity extends AppCompatActivity {
         numberPlate = (TextView) findViewById(R.id.numberPlate);
         driverImage = (ImageView) findViewById(R.id.driverImage);
         driverName = (TextView) findViewById(R.id.driverName);
+        btnRate = (Button)findViewById(R.id.btnRate);
+        ratingTextView = (TextView)findViewById(R.id.ratingTextView);
 
+//        ratingTextView.setText(currentVan.getRates());
 
-
+        btnRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(VansDetailActivity.this,RatingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //firebase
         database = FirebaseDatabase.getInstance();
@@ -109,43 +92,12 @@ public class VansDetailActivity extends AppCompatActivity {
 
         //get van clicked id from intent
         if (getIntent() != null) {
-            vanId = getIntent().getStringExtra("vanId");
+            Common.vanId = getIntent().getStringExtra("vanId");
         }
 
-//        btnAddReview.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                btnAddReview.setVisibility(View.INVISIBLE);
-//                DatabaseReference vansData = database.getReference("Comment").child(vanId).push();
-//                String comment_content = edtReview.getText().toString();
-//                String uid = firebaseUser.getUid();
-//                String uname = firebaseUser.getDisplayName();
-//                Comment comment = new Comment(comment_content,uid,uname);
-//            }
-//        });
-//
-//        vansData.setValue(currentVan).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//                showMessage("comment added");
-//                edtReview.setText("");
-//                btnAddReview.setVisibility(View.VISIBLE);
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                showMessage("failed to add comment : "+e.getMessage());
-//            }
-//        });
+        loadVans(Common.vanId);
 
-
-        loadVans(vanId);
     }
-//    private void showMessage(String message) {
-//
-//        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
-//
-//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -170,7 +122,7 @@ public class VansDetailActivity extends AppCompatActivity {
                 currentVan = dataSnapshot.getValue(VansItem.class);
                 Picasso.get().load(currentVan.getCarImage()).into(vanImage);
                 numberPlate.setText(currentVan.getNumberPlate());
-                Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
+                  Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
                 driverName.setText(currentVan.getDriver());
             }
 
@@ -180,6 +132,5 @@ public class VansDetailActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }

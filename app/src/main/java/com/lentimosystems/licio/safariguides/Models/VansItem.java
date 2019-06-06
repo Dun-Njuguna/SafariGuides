@@ -5,6 +5,7 @@ public class VansItem {
     public String driver;
     public String driver_image;
     public String number_plate;
+    public String rates;
 
     public VansItem() {
     }
@@ -14,6 +15,15 @@ public class VansItem {
         this.driver = driver;
         this.driver_image = driver_image;
         this.number_plate = number_plate;
+    }
+
+
+    public String getRates() {
+        return rates;
+    }
+
+    public void setRates(String rates) {
+        this.rates = rates;
     }
 
     public String getCarImage() {
