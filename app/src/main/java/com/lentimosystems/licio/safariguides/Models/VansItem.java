@@ -10,11 +10,12 @@ public class VansItem {
     public VansItem() {
     }
 
-    public VansItem(String car_image, String driver, String driver_image, String number_plate) {
+    public VansItem(String car_image, String driver, String driver_image, String number_plate, String rates) {
         this.car_image = car_image;
         this.driver = driver;
         this.driver_image = driver_image;
         this.number_plate = number_plate;
+        this.rates = rates;
     }
 
 

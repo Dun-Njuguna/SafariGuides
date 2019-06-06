@@ -37,7 +37,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
-import com.lentimosystems.licio.safariguides.Models.Comment;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
 import com.lentimosystems.licio.safariguides.ViewHolder.VansDetailViewHolder;
 import com.squareup.picasso.Callback;
@@ -122,8 +121,12 @@ public class VansDetailActivity extends AppCompatActivity {
                 currentVan = dataSnapshot.getValue(VansItem.class);
                 Picasso.get().load(currentVan.getCarImage()).into(vanImage);
                 numberPlate.setText(currentVan.getNumberPlate());
-                  Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
+                Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
                 driverName.setText(currentVan.getDriver());
+                if (currentVan.getRates().equals("NaN"))
+                    ratingTextView.setText("No rates yet");
+                else
+                    ratingTextView.setText(currentVan.getRates());
             }
 
             @Override
