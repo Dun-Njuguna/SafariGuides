@@ -52,7 +52,7 @@ public class TrucksFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final TrucksViewHolder holder, int position, @NonNull final VansItem model) {
                 Picasso.get()
-                        .load(model.getCarImage())
+                        .load(model.getCar_image())
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(holder.background_image, new Callback() {
                             @Override
@@ -63,7 +63,7 @@ public class TrucksFragment extends Fragment {
                             @Override
                             public void onError(Exception e) {
                                 Picasso.get()
-                                        .load(model.getCarImage())
+                                        .load(model.getCar_image())
                                         .error(R.drawable.ic_terrain_black_24dp)
                                         .into(holder.background_image, new Callback() {
                                             @Override
@@ -78,7 +78,7 @@ public class TrucksFragment extends Fragment {
                                         });
                             }
                         });
-                holder.truck_name.setText(model.getNumberPlate());
+                holder.truck_name.setText(model.getNumber_plate());
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override

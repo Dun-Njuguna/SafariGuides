@@ -55,7 +55,7 @@ public class CruisersFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final CruisersViewHolder holder, int position, @NonNull final VansItem model) {
                 Picasso.get()
-                        .load(model.getCarImage())
+                        .load(model.getCar_image())
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(holder.background_image, new Callback() {
                             @Override
@@ -66,7 +66,7 @@ public class CruisersFragment extends Fragment {
                             @Override
                             public void onError(Exception e) {
                                 Picasso.get()
-                                        .load(model.getCarImage())
+                                        .load(model.getCar_image())
                                         .error(R.drawable.ic_terrain_black_24dp)
                                         .into(holder.background_image, new Callback() {
                                             @Override
@@ -81,7 +81,7 @@ public class CruisersFragment extends Fragment {
                                         });
                             }
                         });
-                holder.cruiser_name.setText(model.getNumberPlate());
+                holder.cruiser_name.setText(model.getNumber_plate());
 
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override

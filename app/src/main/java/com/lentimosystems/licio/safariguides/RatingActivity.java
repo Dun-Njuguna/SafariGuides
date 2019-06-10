@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +42,8 @@ public class RatingActivity extends AppCompatActivity {
 
     double ratingStars = 0.0;
 
+    String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,14 @@ public class RatingActivity extends AppCompatActivity {
                 ratingStars = rating;
             }
         });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // does not return current user
+                    //returns Already have an account? Login Here
+           name = user.getDisplayName();
+        }
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +86,7 @@ public class RatingActivity extends AppCompatActivity {
         Rate rate = new Rate();
         rate.setRates(String.valueOf(ratingStars));
         rate.setComment(edtReview.getText().toString());
+        rate.setName(name);
 
         rateDetailRef.child(vanId)
                 //.child(FirebaseAuth.getInstance().getCurrentUser().getUid())

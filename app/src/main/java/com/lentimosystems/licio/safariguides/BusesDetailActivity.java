@@ -80,8 +80,8 @@ public class BusesDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentBus = dataSnapshot.getValue(VansItem.class);
-                Picasso.get().load(currentBus.getCarImage()).into(busImage);
-                numberPlate.setText(currentBus.getNumberPlate());
+                Picasso.get().load(currentBus.getCar_image()).into(busImage);
+                numberPlate.setText(currentBus.getNumber_plate());
                // Picasso.get().load(currentBus.getDriverImage()).into(driverImage);
                 driverName.setText(currentBus.getDriver());
             }

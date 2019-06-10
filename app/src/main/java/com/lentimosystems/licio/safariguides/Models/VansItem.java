@@ -18,20 +18,11 @@ public class VansItem {
         this.rates = rates;
     }
 
-
-    public String getRates() {
-        return rates;
-    }
-
-    public void setRates(String rates) {
-        this.rates = rates;
-    }
-
-    public String getCarImage() {
+    public String getCar_image() {
         return car_image;
     }
 
-    public void setCarImage(String car_image) {
+    public void setCar_image(String car_image) {
         this.car_image = car_image;
     }
 
@@ -43,19 +34,27 @@ public class VansItem {
         this.driver = driver;
     }
 
-    public String getDriverImage() {
+    public String getDriver_image() {
         return driver_image;
     }
 
-    public void setDriverImage(String driver_image) {
+    public void setDriver_image(String driver_image) {
         this.driver_image = driver_image;
     }
 
-    public String getNumberPlate() {
+    public String getNumber_plate() {
         return number_plate;
     }
 
-    public void setNumberPlate(String number_plate) {
+    public void setNumber_plate(String number_plate) {
         this.number_plate = number_plate;
+    }
+
+    public String getRates() {
+        return rates;
+    }
+
+    public void setRates(String rates) {
+        this.rates = rates;
     }
 }

@@ -92,6 +92,7 @@ public class VansDetailActivity extends AppCompatActivity {
         //get van clicked id from intent
         if (getIntent() != null) {
             Common.vanId = getIntent().getStringExtra("vanId");
+            Log.d("vaidid", Common.vanId);
         }
 
         loadVans(Common.vanId);
@@ -119,9 +120,9 @@ public class VansDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentVan = dataSnapshot.getValue(VansItem.class);
-                Picasso.get().load(currentVan.getCarImage()).into(vanImage);
-                numberPlate.setText(currentVan.getNumberPlate());
-                Picasso.get().load(currentVan.getDriverImage()).into(driverImage);
+                Picasso.get().load(currentVan.getCar_image()).into(vanImage);
+                numberPlate.setText(currentVan.getNumber_plate());
+                Picasso.get().load(currentVan.getDriver_image()).into(driverImage);
                 driverName.setText(currentVan.getDriver());
                 if (currentVan.getRates().equals("NaN"))
                     ratingTextView.setText("No rates yet");

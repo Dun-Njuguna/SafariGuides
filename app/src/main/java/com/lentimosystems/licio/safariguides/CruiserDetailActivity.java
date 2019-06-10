@@ -80,9 +80,9 @@ public class CruiserDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentCruiser = dataSnapshot.getValue(VansItem.class);
-                Picasso.get().load(currentCruiser.getCarImage()).into(cruiserImage);
-                numberPlate.setText(currentCruiser.getNumberPlate());
-                Picasso.get().load(currentCruiser.getDriverImage()).into(driverImage);
+                Picasso.get().load(currentCruiser.getCar_image()).into(cruiserImage);
+                numberPlate.setText(currentCruiser.getNumber_plate());
+                Picasso.get().load(currentCruiser.getDriver_image()).into(driverImage);
                 driverName.setText(currentCruiser.getDriver());
             }
 

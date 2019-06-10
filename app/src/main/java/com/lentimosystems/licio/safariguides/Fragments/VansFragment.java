@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.lentimosystems.licio.safariguides.Common.Common;
 import com.lentimosystems.licio.safariguides.Interface.ItemClickListener;
 import com.lentimosystems.licio.safariguides.Models.VansItem;
@@ -43,30 +46,29 @@ public class VansFragment extends Fragment {
     private static VansFragment INSTANCE=null;
 
 
-    public VansFragment() {
+    public void VansFragment() {
        database = FirebaseDatabase.getInstance();
        vansData = database.getReference(Common.STR_VANS_BACKGROUND);
 
-       options = new FirebaseRecyclerOptions.Builder<VansItem>()
-               .setQuery(vansData,VansItem.class)
-               .build();
+        options = new FirebaseRecyclerOptions.Builder<VansItem>()
+                .setQuery(vansData,VansItem.class)
+                .build();
+        adapter = new FirebaseRecyclerAdapter<VansItem, VansViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull final VansViewHolder holder, int position, @NonNull final VansItem model) {
+                Picasso.get()
+                        .load(model.getCar_image())
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(holder.background_image, new Callback() {
+                            @Override
+                            public void onSuccess() {
 
-       adapter = new FirebaseRecyclerAdapter<VansItem, VansViewHolder>(options) {
-           @Override
-           protected void onBindViewHolder(@NonNull final VansViewHolder holder, int position, @NonNull final VansItem model) {
-               Picasso.get()
-                       .load(model.getCarImage())
-                       .networkPolicy(NetworkPolicy.OFFLINE)
-                       .into(holder.background_image, new Callback() {
-                           @Override
-                           public void onSuccess() {
+                            }
 
-                           }
-
-                           @Override
-                           public void onError(Exception e) {
+                            @Override
+                            public void onError(Exception e) {
                                 Picasso.get()
-                                        .load(model.getCarImage())
+                                        .load(model.getCar_image())
                                         .error(R.drawable.ic_terrain_black_24dp)
                                         .into(holder.background_image, new Callback() {
                                             @Override
@@ -79,9 +81,9 @@ public class VansFragment extends Fragment {
                                                 Log.e("Error","Couldn't fetch image");
                                             }
                                         });
-                           }
-                       });
-               holder.van_name.setText(model.getNumberPlate());
+                            }
+                        });
+               holder.van_name.setText(model.getNumber_plate());
 
                holder.setItemClickListener(new ItemClickListener() {
                    @Override
@@ -103,6 +105,8 @@ public class VansFragment extends Fragment {
                return new VansViewHolder(itemView);
            }
        };
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
     }
 
     public static VansFragment getInstance(){
@@ -122,19 +126,14 @@ public class VansFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_category, container, false);
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_vans);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recycler_van);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),2);
         recyclerView.setLayoutManager(gridLayoutManager);
-        
-        setVans();
-        
-        return view;
-    }
 
-    private void setVans() {
-        adapter.startListening();
-        recyclerView.setAdapter(adapter);
+        VansFragment();
+
+        return view;
     }
 
     @Override
