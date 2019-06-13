@@ -7,6 +7,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_cruisers"
+        android:layout_marginStart="13dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
